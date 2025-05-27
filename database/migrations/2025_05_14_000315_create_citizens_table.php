@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('first_name', 60);
             $table->string('last_name', 60);
             $table->date('birth_date');
-            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('restrict');
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
             $table->timestamps();
