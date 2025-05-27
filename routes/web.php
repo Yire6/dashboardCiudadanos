@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CitizenController;
+use App\Http\Controllers\EstadisticasController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+Route::get('/estadisticas', [EstadisticasController::class,'index'])
+         ->name('estadisticas');
 
 // Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
 // Route::get('/cities/create', [CityController::class, 'create'])->name('cities.create');
