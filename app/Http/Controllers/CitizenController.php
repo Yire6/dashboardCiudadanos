@@ -11,16 +11,28 @@ class CitizenController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        try {
-            $citizens = Citizen::orderBy('first_name', 'asc')->paginate(6);
-            return view('citizens.index', compact('citizens'));
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al obtener los ciudadanos: ' . $e->getMessage());
+    public function index(Request $request)
+{
+    $search = $request->get('search');
+
+    $cities = City::with(['citizens' => function($q) use ($search) {
+        if ($search) {
+            $q->where('first_name','like',"%{$search}%")
+              ->orWhere('last_name','like',"%{$search}%");
         }
-    }
+    }])
+    ->when($search, fn($q) =>
+        $q->where('name','like',"%{$search}%")
+          ->orWhereHas('citizens', fn($q2) =>
+              $q2->where('first_name','like',"%{$search}%")
+                 ->orWhere('last_name','like',"%{$search}%")
+          )
+    )
+    ->orderBy('name')
+    ->get();
+
+    return view('citizens.index', compact('cities','search'));
+}
 
     /**
      * Show the form for creating a new resource.
