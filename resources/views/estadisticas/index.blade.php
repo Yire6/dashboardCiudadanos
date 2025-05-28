@@ -12,6 +12,15 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            {{-- Botón: Enviar reporte por correo --}}
+            <form action="{{ route('estadisticas.report') }}" method="POST" class="mb-6">
+                @csrf
+                <button type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition">
+                    {{ __('Enviar reporte por correo') }}
+                </button>
+            </form>
+
             {{-- Cards de métricas --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Total de ciudades -->

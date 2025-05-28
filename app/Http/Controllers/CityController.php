@@ -12,11 +12,13 @@ class CityController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             $cities = City::orderBy('name', 'asc')->paginate(6);
             return view('cities.index', compact('cities'));
-        }catch(\Exception $e){
-            return redirect()->back()->with('error', 'Error al obtener las ciudades: ' . $e->getMessage());}
+        } catch (\Exception $e) {
+            return redirect()->back()
+                             ->with('error', 'Error al obtener las ciudades: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -24,10 +26,11 @@ class CityController extends Controller
      */
     public function create()
     {
-        try{
+        try {
             return view('cities.create');
-        }catch(\Exception $e){
-            return redirect()->back()->with('error', 'Error al cargar el formulario de creación: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->back()
+                             ->with('error', 'Error al cargar el formulario de creación: ' . $e->getMessage());
         }
     }
 
@@ -37,15 +40,17 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
         ]);
 
         try {
             City::create($request->all());
-            return redirect()->route('cities.index')->with('success', 'Ciudad creada con éxito.');
+            return redirect()->route('cities.index')
+                             ->with('success', 'Ciudad creada con éxito.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al crear la ciudad: ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('error', 'Error al crear la ciudad: ' . $e->getMessage());
         }
     }
 
@@ -58,7 +63,8 @@ class CityController extends Controller
             $city = City::findOrFail($id);
             return view('cities.show', compact('city'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al obtener la ciudad: ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('error', 'Error al obtener la ciudad: ' . $e->getMessage());
         }
     }
 
@@ -71,7 +77,8 @@ class CityController extends Controller
             $city = City::findOrFail($id);
             return view('cities.edit', compact('city'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al cargar el formulario de edición: ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('error', 'Error al cargar el formulario de edición: ' . $e->getMessage());
         }
     }
 
@@ -81,32 +88,33 @@ class CityController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
         ]);
 
         try {
             $city = City::findOrFail($id);
             $city->update($request->all());
-            return redirect()->route('cities.index')->with('success', 'Ciudad actualizada con éxito.');
+            return redirect()->route('cities.index')
+                             ->with('success', 'Ciudad actualizada con éxito.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error al actualizar la ciudad: ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('error', 'Error al actualizar la ciudad: ' . $e->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    
-        public function destroy(City $city)
-        {
-            if ($city->citizens()->exists()) {
-                return back()->with('error', 'No se puede eliminar esta ciudad: tiene ciudadanos asignados.');
-            }
-            $city->delete();
-            return back()->with('success', 'Ciudad eliminada correctamente.');
+    public function destroy(City $city)
+    {
+        // Protección: no borrar si hay ciudadanos
+        if ($city->citizens()->exists()) {
+            return back()->with('error', 'No se puede eliminar esta ciudad: tiene ciudadanos asignados.');
         }
 
+        $city->delete();
 
-    
+        return back()->with('success', 'Ciudad eliminada correctamente.');
+    }
 }

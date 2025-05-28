@@ -6,8 +6,28 @@ use App\Models\City;
 use App\Models\Citizen;
 use Illuminate\Http\Request;
 
+use App\Mail\ReporteCiudadanosMail;
+use Illuminate\Support\Facades\Mail;
+
+
 class EstadisticasController extends Controller
 {
+    public function sendReport()
+{
+    $citiesWithCount = \App\Models\City::withCount('citizens')
+                          ->orderBy('citizens_count','desc')
+                          ->get();
+
+    Mail::to(auth()->user()->email)
+        ->send(new ReporteCiudadanosMail($citiesWithCount));
+
+    return back()->with('success', '¡Reporte enviado a tu correo!');
+}
+
+
+
+
+
     public function index()
 {
     // 1) Conteo total de ciudades
@@ -31,3 +51,4 @@ class EstadisticasController extends Controller
     ]);
 }
 }
+
