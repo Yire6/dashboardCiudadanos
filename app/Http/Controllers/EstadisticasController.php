@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 
 use App\Mail\ReporteCiudadanosMail;
 use Illuminate\Support\Facades\Mail;
-
+use PDF;       
 
 class EstadisticasController extends Controller
 {
+
+public function downloadCitiesPdf()
+{
+    $cities = City::withCount('citizens')->orderBy('name')->get();
+    $pdf = PDF::loadView('reports.cities', compact('cities'))
+              ->setPaper('A4','landscape');
+
+    return $pdf->download('reporte-ciudades.pdf');
+}
+
     public function sendReport()
 {
     $citiesWithCount = \App\Models\City::withCount('citizens')

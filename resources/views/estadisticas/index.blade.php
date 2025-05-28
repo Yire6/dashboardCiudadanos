@@ -21,6 +21,14 @@
                 </button>
             </form>
 
+                <div class="px-6 py-4">
+                    <a href="{{ route('estadisticas.report.pdf') }}"
+                        class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition">
+                        {{ __('Descargar reporte PDF') }}
+                    </a>
+                </div>
+
+
             {{-- Cards de métricas --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Total de ciudades -->

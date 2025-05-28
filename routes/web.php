@@ -10,6 +10,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/estadisticas/report/pdf',
+    [EstadisticasController::class,'downloadCitiesPdf'])
+    ->middleware(['auth','verified'])
+    ->name('estadisticas.report.pdf');
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
