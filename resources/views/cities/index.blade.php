@@ -38,7 +38,7 @@
                         <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $city->name }}</h3>
                         <p class="text-gray-600 mb-4">{{ $city->description }}</p>
                     </div>
-                    <div class="flex justify-end space-x-4">
+                    <div class="flex justify-end items-center space-x-4">
                         <a href="{{ route('cities.edit', $city) }}"
                            class="text-indigo-600 hover:text-indigo-900 font-medium">
                             {{ __('Edit') }}
